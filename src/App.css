@@ -1,0 +1,265 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	height: 100vh;
+	background: #1a1a1a;
+	color: #e0e0e0;
+	font-family: system-ui, sans-serif;
+	overflow: hidden;
+}
+
+#root {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.dropzone {
+	width: 100%;
+	max-width: 400px;
+	aspect-ratio: 1;
+	border: 2px dashed #555;
+	border-radius: 12px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	transition:
+		border-color 0.15s,
+		background 0.15s;
+}
+
+.dropzone:hover,
+.dropzone[data-dragging='true'] {
+	border-color: #888;
+	background: #252525;
+}
+
+.dropzone p {
+	margin: 0;
+	font-size: 1.1rem;
+	pointer-events: none;
+}
+
+.file-input {
+	position: absolute;
+	inset: 0;
+	opacity: 0;
+	cursor: pointer;
+}
+
+.app {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	padding: 1rem;
+	gap: 1rem;
+}
+
+.app.layout-row {
+	flex-direction: row;
+}
+
+.app.layout-column {
+	flex-direction: column;
+}
+
+.canvas-container {
+	flex: 1 1 0;
+	min-width: 0;
+	min-height: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+}
+
+.canvas {
+	display: block;
+	background: #2a2a2a;
+	border-radius: 8px;
+	max-width: 100%;
+	max-height: 100%;
+	object-fit: contain;
+}
+
+.sidebar {
+	flex: 0 0 auto;
+	display: flex;
+	gap: 1rem;
+	overflow: auto;
+}
+
+.sortable-picker-wrap {
+	display: flex;
+	flex-shrink: 0;
+	align-items: center;
+	padding-left: 1.5rem;
+}
+
+.sortable-picker-wrap.layout-row {
+	flex-direction: row;
+	gap: 0.5rem;
+}
+
+.sortable-picker-wrap.layout-column {
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.sortable-picker-wrap .picker-wrap {
+	flex: 1;
+	min-width: 0;
+}
+
+.sortable-picker-wrap[data-dragging='true'] {
+	opacity: 0.6;
+}
+
+.drag-handle {
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0.75rem;
+	color: #666;
+	cursor: grab;
+	border: none;
+	background: transparent;
+	border-radius: 4px;
+}
+
+.drag-handle:hover {
+	color: #888;
+}
+
+.drag-handle:active {
+	cursor: grabbing;
+}
+
+.layout-row .sidebar {
+	flex-direction: column;
+	align-items: center;
+	max-height: 100%;
+}
+
+.layout-column .sidebar {
+	flex-direction: row;
+	justify-content: center;
+	flex-wrap: wrap;
+	max-width: 100%;
+}
+
+.picker-wrap {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.5rem;
+	width: 200px;
+}
+
+.picker-header {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	width: 100%;
+}
+
+.hex-input-wrap {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	align-items: stretch;
+	border: 1px solid #444;
+	border-radius: 4px;
+	background: #2a2a2a;
+}
+
+.hex-input-wrap:focus-within {
+	border-color: #666;
+}
+
+.hex-prefix {
+	display: flex;
+	align-items: center;
+	padding: 0.35rem 0 0.35rem 0.5rem;
+	font-size: 0.85rem;
+	font-family: ui-monospace, monospace;
+	color: #888;
+}
+
+.hex-input {
+	flex: 1;
+	min-width: 0;
+	padding: 0.35rem 0.5rem;
+	font-size: 0.85rem;
+	font-family: ui-monospace, monospace;
+	color: #e0e0e0;
+	background: transparent;
+	border: none;
+}
+
+.hex-input:focus {
+	outline: none;
+}
+
+.reset-btn {
+	flex-shrink: 0;
+	padding: 0.35rem 0.6rem;
+	font-size: 0.8rem;
+	color: #aaa;
+	background: #333;
+	border: 1px solid #444;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.reset-btn:hover {
+	color: #e0e0e0;
+	background: #404040;
+}
+
+.save-btn {
+	width: 100%;
+	margin-top: auto;
+	margin-left: auto;
+	padding: 0.5rem 0.75rem;
+	font-size: 0.9rem;
+	color: #e0e0e0;
+	background: #333;
+	border: 1px solid #444;
+	border-radius: 4px;
+	cursor: pointer;
+	flex-shrink: 0;
+}
+
+.save-btn:hover {
+	background: #404040;
+}
+
+.picker {
+	--react-colorful__saturation-pointer-width: 16px;
+	--react-colorful__saturation-pointer-height: 16px;
+	--react-colorful__hue-pointer-width: 16px;
+	--react-colorful__hue-pointer-height: 16px;
+	.react-colorful__saturation {
+		border-radius: 4px 4px 0 0;
+	}
+	.react-colorful__hue {
+		border-radius: 0 0 4px 4px;
+	}
+}
+
+.hint {
+	margin: 0;
+	font-size: 0.85rem;
+	color: #888;
+	text-align: center;
+	flex-shrink: 0;
+	white-space: nowrap;
+}
