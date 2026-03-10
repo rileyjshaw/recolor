@@ -19,31 +19,57 @@ body {
 	justify-content: center;
 }
 
-.dropzone {
-	width: 100%;
-	max-width: 400px;
-	aspect-ratio: 1;
-	border: 2px dashed #555;
-	border-radius: 12px;
+.drop-prompt {
+	position: absolute;
+	inset: 0;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	position: relative;
-	transition:
-		border-color 0.15s,
-		background 0.15s;
+	text-align: center;
+	text-wrap: balance;
+	padding: 2rem;
 }
 
-.dropzone:hover,
-.dropzone[data-dragging='true'] {
-	border-color: #888;
-	background: #252525;
+.drop-prompt-text {
+	line-height: 1.5;
+	max-width: 360px;
 }
 
-.dropzone p {
-	margin: 0;
-	font-size: 1.1rem;
-	pointer-events: none;
+.drop-prompt .corner {
+	position: absolute;
+	width: 60px;
+	height: 60px;
+	border-color: #fff;
+	border-style: solid;
+	border-width: 0;
+}
+
+.drop-prompt .corner-tl {
+	top: 20px;
+	left: 20px;
+	border-top-width: 2px;
+	border-left-width: 2px;
+}
+
+.drop-prompt .corner-tr {
+	top: 20px;
+	right: 20px;
+	border-top-width: 2px;
+	border-right-width: 2px;
+}
+
+.drop-prompt .corner-bl {
+	bottom: 20px;
+	left: 20px;
+	border-bottom-width: 2px;
+	border-left-width: 2px;
+}
+
+.drop-prompt .corner-br {
+	bottom: 20px;
+	right: 20px;
+	border-bottom-width: 2px;
+	border-right-width: 2px;
 }
 
 .file-input {
@@ -54,6 +80,7 @@ body {
 }
 
 .app {
+	position: relative;
 	display: flex;
 	width: 100%;
 	height: 100%;

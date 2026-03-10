@@ -200,11 +200,11 @@ function SortablePickerWrap({ hex, index, layout, hsl, updateColor }) {
 function App() {
 	const [colorMap, setColorMap] = useState(null);
 	const [paletteHexOrder, setPaletteHexOrder] = useState(null);
-	const [dragging, setDragging] = useState(false);
 	const containerRef = useRef(null);
 	const shaderRef = useRef(null);
 	const imgRef = useRef(null);
 	const indexMapRef = useRef(null);
+	const processImageRef = useRef(null);
 	const layout = useLayout(paletteHexOrder?.length ?? 0);
 
 	function processImage(img) {
@@ -294,15 +294,29 @@ function App() {
 		};
 	}, [paletteHexOrder]);
 
-	function handleDrop(e) {
-		e.preventDefault();
-		setDragging(false);
-		const file = e.dataTransfer?.files?.[0];
-		if (!file || !file.type.startsWith('image/')) return;
-		const img = new Image();
-		img.onload = () => processImage(img);
-		img.src = URL.createObjectURL(file);
-	}
+	useEffect(() => {
+		processImageRef.current = processImage;
+	});
+
+	useEffect(() => {
+		function onDragover(e) {
+			if (e.dataTransfer?.types?.includes('Files')) e.preventDefault();
+		}
+		function onDrop(e) {
+			e.preventDefault();
+			const file = e.dataTransfer?.files?.[0];
+			if (!file || !file.type.startsWith('image/')) return;
+			const img = new Image();
+			img.onload = () => processImageRef.current(img);
+			img.src = URL.createObjectURL(file);
+		}
+		window.addEventListener('dragover', onDragover);
+		window.addEventListener('drop', onDrop);
+		return () => {
+			window.removeEventListener('dragover', onDragover);
+			window.removeEventListener('drop', onDrop);
+		};
+	}, []);
 
 	function handleFileInput(e) {
 		const file = e.target.files?.[0];
@@ -336,24 +350,6 @@ function App() {
 		return () => document.removeEventListener('keydown', onKeyDown);
 	}, []);
 
-	if (!colorMap) {
-		return (
-			<div
-				className="dropzone"
-				onDragOver={e => {
-					e.preventDefault();
-					setDragging(true);
-				}}
-				onDragLeave={() => setDragging(false)}
-				onDrop={handleDrop}
-				data-dragging={dragging}
-			>
-				<p>Drop an image here</p>
-				<input type="file" accept="image/*" onChange={handleFileInput} className="file-input" />
-			</div>
-		);
-	}
-
 	function handleDragEnd(event) {
 		setPaletteHexOrder(order => {
 			const next = move(order, event);
@@ -365,6 +361,19 @@ function App() {
 			}
 			return next;
 		});
+	}
+
+	if (!colorMap) {
+		return (
+			<div className="drop-prompt">
+				<p className="drop-prompt-text">Drag in an image with 32 colors max</p>
+				<div className="corner corner-tl" />
+				<div className="corner corner-tr" />
+				<div className="corner corner-bl" />
+				<div className="corner corner-br" />
+				<input type="file" accept="image/*" onChange={handleFileInput} className="file-input" />
+			</div>
+		);
 	}
 
 	return (
