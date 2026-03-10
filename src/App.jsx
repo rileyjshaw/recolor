@@ -229,9 +229,14 @@ function App() {
 		});
 		const src = data.data;
 		const indexMap = new Uint8Array(w * h);
-		for (let i = 0; i < src.length; i += 4) {
-			const key = (src[i] << 16) | (src[i + 1] << 8) | src[i + 2];
-			indexMap[i / 4] = colorIndexMap.get(key) ?? 255;
+		for (let row = 0; row < h; row++) {
+			const srcOffset = row * w * 4;
+			const dstOffset = (h - 1 - row) * w;
+			for (let col = 0; col < w; col++) {
+				const i = srcOffset + col * 4;
+				const key = (src[i] << 16) | (src[i + 1] << 8) | src[i + 2];
+				indexMap[dstOffset + col] = colorIndexMap.get(key) ?? 255;
+			}
 		}
 		imgRef.current = img;
 		indexMapRef.current = indexMap;
