@@ -55,7 +55,7 @@ function hexToHsl(hex) {
 				h = ((r - g) / d + 4) / 6;
 		}
 	}
-	return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+	return { h: h * 360, s: s * 100, l: l * 100 };
 }
 
 function hslToRgb(h, s, l) {
@@ -148,8 +148,9 @@ function SortablePickerWrap({ hex, index, layout, hsl, updateColor }) {
 		const raw = e.target.value;
 		const sanitized = raw.replace(/[^0-9a-fA-F]/g, '').slice(0, 6);
 		setInputValue(sanitized);
-		if (sanitized.length === 6) {
-			updateColor(hex, hexToHsl('#' + sanitized.toLowerCase()));
+		const parsed = parseHex(sanitized);
+		if (parsed) {
+			updateColor(hex, hexToHsl(parsed));
 		}
 	}
 
